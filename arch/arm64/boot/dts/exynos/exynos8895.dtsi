@@ -479,13 +479,13 @@
 			device_type = "schedtune-freqvar";
 			shared-cpus = "0-3";
 			/* this table works like target_load of interactive parameter */
-			table = < 100 598000 60 715000 30 832000 20 949000 10 1053000 0 >;
+			table = < 100 598000 60 715000 30 832000 20 949000 10 1898000 0 >;
 		};
 		domain@1 {
 			device_type = "schedtune-freqvar";
 			shared-cpus = "4-7";
 			/* this table works like target_load of interactive parameter */
-			table = < 20 858000 15 962000 5 1261000 0 >;
+			table = < 20 858000 15 962000 5 2808000 0 >;
 		};
 	};
 
@@ -496,11 +496,12 @@
 			cal-id = <ACPM_DVFS_CPUCL1>;
 			dm-type = <DM_CPU_CL0>;
 
-			min-freq = <455000>;
+			min-freq = <715000>;
+			max-freq = <1898000>;
 
 			/* PM QoS Class ID*/
 			pm_qos-min-class = <3>;
-			pm_qos-max-class = <4>;
+			pm_qos-max-class = <5>;
 
 			user-default-qos = <715000>;
 
@@ -541,7 +542,8 @@
 			cal-id = <ACPM_DVFS_CPUCL0>;
 			dm-type = <DM_CPU_CL1>;
 
-			min-freq = <741000>;
+			min-freq = <858000>;
+			max-freq = <2808000>;
 
 			/* PM QoS Class ID*/
 			pm_qos-min-class = <5>;
