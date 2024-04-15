@@ -303,14 +303,15 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
-		-fomit-frame-pointer -std=gnu89 -m64 \
-		-Werror=return-type -fno-strict-aliasing -fno-strict-overflow \
+HOSTCFLAGS   := -Wall -Werror -Wmissing-prototypes -Wstrict-prototypes -O2 \
+		-fomit-frame-pointer -std=gnu89 -m64 -Wno-format-overflow \
+		-fno-strict-aliasing -fno-strict-overflow \
 		-DNDEBUG -pipe -march=core2 -mtune=core2 -mhard-float \
 		-mfpmath=sse -ftree-vectorize
 
-HOSTCXXFLAGS := -O2 -fomit-frame-pointer \
-		-Werror=return-type -fno-strict-aliasing -fno-strict-overflow \
+
+HOSTCXXFLAGS := -Wall -Werror -O2 -fomit-frame-pointer \
+		-fno-strict-aliasing -fno-strict-overflow -Wno-format-overflow \
 		-DNDEBUG -pipe -m64 -march=core2 -mtune=core2 -mhard-float \
 		-mfpmath=sse -ftree-vectorize
 
@@ -403,12 +404,10 @@ LINUXINCLUDE    := \
 
 KBUILD_CPPFLAGS := -D__KERNEL__
 
-KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
-		   -fno-strict-aliasing -fno-common \
-		   -Werror-implicit-function-declaration \
-		   -Wno-format-security \
-		   -Werror=return-type \
-		   -std=gnu89 \
+KBUILD_CFLAGS   := -Wall -Werror -Wundef -Wstrict-prototypes -Wno-trigraphs \
+		   -fno-strict-aliasing -fno-common -Wno-stringop-truncation \
+		   -Wno-format-security -Wno-stringop-overflow -Wno-packed-not-aligned \
+		   -std=gnu89 $(call cc-option,-fno-PIE) \
 		   -D_FORTIFY_SOURCE=1 \
 		   -march=armv8-a+crypto+crc \
 		   -mcpu=exynos-m1+crypto+crc \
@@ -667,7 +666,7 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, attribute-alias)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os
+KBUILD_CFLAGS	+= $(call cc-option,-Oz,-Os)
 else
 ifdef CONFIG_PROFILE_ALL_BRANCHES
 KBUILD_CFLAGS	+= -O2
@@ -785,6 +784,12 @@ endif
 
 KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
 ifdef CONFIG_FRAME_POINTER
+
+KBUILD_CFLAGS += $(call cc-disable-warning, unused-variable)
+KBUILD_CFLAGS += $(call cc-disable-warning, unused-label)
+KBUILD_CFLAGS += $(call cc-disable-warning, unused-function)
+KBUILD_CFLAGS += $(call cc-disable-warning, unused-value)
+
 KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
 else
 # Some targets (ARM with Thumb2, for example), can't be built with frame
@@ -893,6 +898,12 @@ KBUILD_CFLAGS   += $(call cc-option,-Werror=strict-prototypes)
 
 # Prohibit date/time macros, which would make the build non-deterministic
 KBUILD_CFLAGS   += $(call cc-option,-Werror=date-time)
+
+# enforce correct pointer usage
+KBUILD_CFLAGS   += $(call cc-option,-Werror=incompatible-pointer-types)
+
+# Require designated initializers for all marked structures
+KBUILD_CFLAGS   += $(call cc-option,-Werror=designated-init)
 
 # use the deterministic mode of AR if available
 KBUILD_ARFLAGS := $(call ar-option,D)
