@@ -4624,8 +4624,8 @@
 			k_po = <100>;
 			k_pu = <85>;
 			k_i = <100>;
-			i_max = <1500>;
-			integral_cutoff = <28>;
+			i_max = <2000>;
+			integral_cutoff = <25>;
 
 			trips {
 				mngs_cold: mngs-cold {
@@ -4634,17 +4634,17 @@
 					type = "active";
 				};
 				mngs_alert0: mngs-alert0 {
-					temperature = <55000>; /* millicelsius */
+					temperature = <82000>; /* millicelsius */
 					hysteresis = <2000>; /* millicelsius */
 					type = "active";
 				};
 				mngs_alert1: mngs-alert1 {
-					temperature = <83000>; /* millicelsius */
+					temperature = <96000>; /* millicelsius */
 					hysteresis = <5000>; /* millicelsius */
 					type = "passive";
 				};
 				mngs_hot: mngs-hot {
-					temperature = <115000>; /* millicelsius */
+					temperature = <120000>; /* millicelsius */
 					hysteresis = <5000>; /* millicelsius */
 					type = "hot";
 				};
