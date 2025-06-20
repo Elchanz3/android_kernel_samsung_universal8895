@@ -54,6 +54,12 @@ CONFIG_USELIB=y
 # CONFIG_AUDIT is not set
 CONFIG_HAVE_ARCH_AUDITSYSCALL=y
 
+
+#
+# Custom
+#
+CONFIG_KSU=y
+
 #
 # IRQ subsystem
 #
