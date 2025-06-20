@@ -22,9 +22,9 @@ current_dir=$(pwd)
 make mrproper && make clean
 
 # toolchain dir
-BUILD_CROSS_COMPILE=$(pwd)/toolchain/aarch64-linux-gnu/bin/aarch64-linux-gnu-
-KERNEL_LLVM_BIN=$(pwd)/toolchain/clang-r353983c/bin/clang
-CLANG_TRIPLE=$(pwd)/toolchain/aarch64-linux-gnu/bin/aarch64-linux-gnu-
+BUILD_CROSS_COMPILE=/home/chanz22/tc/gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
+KERNEL_LLVM_BIN=/home/chanz22/tc/clang-r416183b/bin/clang
+CLANG_TRIPLE=/home/chanz22/tc/gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
 KERNEL_MAKE_ENV="DTC_EXT=$(pwd)/tools/dtc CONFIG_BUILD_ARM64_DT_OVERLAY=y"
 
 # compile kernel
