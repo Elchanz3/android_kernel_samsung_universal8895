@@ -184,7 +184,7 @@ static bool vmpressure_event(struct vmpressure *vmpr,
 	unsigned long pressure;
 	bool signalled = false;
 
-	pressure = vmpressure_calc_pressure(scanned, reclaimed);
+	pressure = vmpressure_calc_pressure(scanned, reclaimed, vmpr);
 	level = vmpressure_level(pressure);
 
 	mutex_lock(&vmpr->events_lock);
@@ -323,7 +323,7 @@ static void vmpressure_global(gfp_t gfp, unsigned long scanned, bool critical,
 	spin_unlock(&vmpr->sr_lock);
 
 	if (scanned) {
-		pressure = vmpressure_calc_pressure(scanned, reclaimed);
+		pressure = vmpressure_calc_pressure(scanned, reclaimed, vmpr);
 		pressure = vmpressure_account_stall(pressure, stall, scanned);
 	} else {
 		pressure = 100;
@@ -508,3 +508,4 @@ static int __init vmpressure_global_init(void)
 	return 0;
 }
 late_initcall(vmpressure_global_init);
+
