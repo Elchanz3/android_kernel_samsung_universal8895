@@ -124,3 +124,4 @@ AIK/
 *.mips
 *.mips64
 builds/*
+KernelSU-Next/
