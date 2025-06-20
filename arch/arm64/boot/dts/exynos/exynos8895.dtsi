@@ -496,12 +496,12 @@
 			cal-id = <ACPM_DVFS_CPUCL1>;
 			dm-type = <DM_CPU_CL0>;
 
-			min-freq = <455000>;
-			max-freq = <1898000>;
+			min-freq = <332000>;
+			max-freq = <2002000>;
 
 			/* PM QoS Class ID*/
 			pm_qos-min-class = <3>;
-			pm_qos-max-class = <7>;
+			pm_qos-max-class = <9>;
 
 			user-default-qos = <715000>;
 
@@ -514,10 +514,10 @@
 					const-type = <CONSTRAINT_MIN>;
 					dm-type = <DM_MIF>;
 						/*  cpu     mif  */
-					table = < 2002000 1014000
-						  1898000 1014000
-						  1794000 1014000
-						  1690000 1014000
+					table = < 2002000 2093000
+						  1898000 2093000
+						  1794000 2093000
+						  1690000 2093000
 						  1456000  845000
 						  1248000  845000
 						  1053000  845000
@@ -525,7 +525,8 @@
 						   832000  676000
 						   715000  676000
 						   598000  421000
-						   455000       0
+						   455000  421000
+						   332000       0
 						   >;
 				};
 				mif-skew {
@@ -542,13 +543,13 @@
 			cal-id = <ACPM_DVFS_CPUCL0>;
 			dm-type = <DM_CPU_CL1>;
 
-			min-freq = <455000>;
+			min-freq = <741000>;
 			max-freq = <2808000>;
 
 			/* PM QoS Class ID*/
-			pm_qos-min-class = <5>;
-			pm_qos-max-class = <6>;
-			pm_qos-jigbooting = <1469000>;
+			pm_qos-min-class = <1>;
+			pm_qos-max-class = <9>;
+			pm_qos-jigbooting = <2314000>;
 
 			/* auto calibration value */
 			auto-cal-freq = <1703000>;
@@ -559,11 +560,11 @@
 					const-type = <CONSTRAINT_MIN>;
 					dm-type = <DM_MIF>;
 						/*  cpu     mif  */
-					table = < 2808000 1794000
-						  2704000 1794000
-						  2652000 1794000
-						  2574000 1794000
-						  2496000 1794000
+					table = < 2808000 2093000
+						  2704000 2093000
+						  2652000 2093000
+						  2574000 2093000
+						  2496000 2093000
 						  2314000 1794000
 						  2158000 1540000
 						  2002000 1540000
@@ -791,7 +792,7 @@
 		governor = "interactive";
 		interactive_info = <572000 95 0>;
 		gpu_dvfs_table_size = <6 7>; /*<row col>*/
-		gpu_dvfs_table = <  572000    78   99   1  1794000  1690000     0
+		gpu_dvfs_table = <  572000    78   99   1  2093000  1690000     0
 		                    546000    78   99   1  1794000  1690000     2002000
 		                    455000    78   85   1  1540000  1456000     2002000
 		                    385000    78   85   1  1352000  1248000     0
@@ -810,8 +811,8 @@
 		gpu_cold_minimum_vol = <0>;
 		gpu_voltage_offset_margin = <37500>;
 		gpu_tmu_control = <1>;
-		gpu_temp_throttling_level_num = <7>;
-		gpu_temp_throttling = <572000 546000 455000 385000 338000 260000 260000>;
+		gpu_temp_throttling_level_num = <6>;
+		gpu_temp_throttling = <572000 546000 455000 385000 338000 260000>;
 		gpu_power_coeff = <625>;
 		gpu_dvfs_time_interval = <2>; /*1 tick : 10ms*/
 		gpu_default_wakeup_lock = <1>;
@@ -823,7 +824,7 @@
 		gpu_runtime_pm_delay_time = <20>;
 		gpu_dvfs_polling_time = <30>;
 		gpu_pmqos_int_disable = <1>;
-		gpu_pmqos_mif_max_clock = <1794000>;
+		gpu_pmqos_mif_max_clock = <2093000>;
 		gpu_pmqos_mif_max_clock_base = <572000>;
 		gpu_cl_dvfs_start_base = <455000>;
 		gpu_debug_level = <3>; /*DEBUG(1) INFO(2) WARNING(3) ERROR(4)*/
@@ -832,7 +833,7 @@
 		gpu_boost_gpu_min_lock = <0>;
 		gpu_boost_egl_min_lock = <1872000>;
 		gpu_vk_boost_max_lock = <572000>;
-		gpu_vk_boost_mif_min_lock = <1794000>;
+		gpu_vk_boost_mif_min_lock = <2093000>;
 		gpu_bts_support = <1>;
 		gpu_asv_cali_lock_val = <572000>; /*Should check this value when MALI_ASV_CALIBRATION_SUPPORT is enabled*/
 		gpu_set_pmu_duration_reg = <0x40F0>; /* only for KC for now*/
@@ -881,7 +882,7 @@
 		/* 2. UFS COMMON           */
 		/* ----------------------- */
 		freq-table-hz = <0 0>, <0 0>;
-		pclk-freq-avail-range = <70000000 176000000>;
+		pclk-freq-avail-range = <216000000 216000000>;
 
 		ufs,pmd-local-l2-timer = <8000 28000 20000>;
 		ufs,pmd-remote-l2-timer = <12000 32000 16000>;
@@ -2494,7 +2495,7 @@
 		/* initial_freq, default_qos, suspend_freq, min_freq, max_freq reboot_freq */
 
 		/* Booting value */
-		boot_info = <40 1794000>;
+		boot_info = <40 2093000>;
 		/* boot_qos_timeout, boot_freq */
 
 		use_get_dev = "false";
@@ -3850,7 +3851,7 @@
 				thrd_mb = <4517358>;
 				freq_mfc = <667000>;
 				freq_int = <533000>;
-				freq_mif = <1794000>;
+				freq_mif = <2093000>;
 				freq_cpu = <0>;
 				freq_kfc = <0>;
 				mo_value = <0>;
@@ -5088,7 +5089,7 @@
 			device_type = "cpufreq-userctrl";
 			shared-cpus = "4-7";
 
-			user-default-qos = <962000>;
+			user-default-qos = <2808000>;
 
 			min-limit {
 				ctrl-type = <PM_QOS_MIN_LIMIT>;
@@ -5111,7 +5112,8 @@
 					1066000 715000
 					 962000 715000
 					 858000 715000
-					 741000 715000>;
+					 741000 715000
+			                 741000 332000>;
 			};
 
 			max-limit {

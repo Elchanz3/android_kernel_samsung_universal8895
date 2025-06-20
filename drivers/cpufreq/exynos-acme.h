@@ -34,6 +34,9 @@ struct exynos_cpufreq_domain {
 	struct cpumask			cpus;
 	unsigned int			cal_id;
 	enum exynos_dm_type		dm_type;
+	
+	unsigned int			max_usable_freq;
+	unsigned int			min_usable_freq;
 
 	/* frequency scaling */
 	bool				enabled;
