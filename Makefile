@@ -303,17 +303,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   := -Wall -Werror -Wmissing-prototypes -Wstrict-prototypes -O2 \
-		-fomit-frame-pointer -std=gnu89 -m64 -Wno-format-overflow \
-		-fno-strict-aliasing -fno-strict-overflow \
-		-DNDEBUG -pipe -march=core2 -mtune=core2 -mhard-float \
-		-mfpmath=sse -ftree-vectorize
-
-
-HOSTCXXFLAGS := -Wall -Werror -O2 -fomit-frame-pointer \
-		-fno-strict-aliasing -fno-strict-overflow -Wno-format-overflow \
-		-DNDEBUG -pipe -m64 -march=core2 -mtune=core2 -mhard-float \
-		-mfpmath=sse -ftree-vectorize
+HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu89
+HOSTCXXFLAGS = -O2
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -348,7 +339,7 @@ include scripts/Kbuild.include
 # Make variables (CC, etc...)
 AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
-CC		= $(CROSS_COMPILE)gcc
+CC		= $(CROSS_COMPILE)clang
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
@@ -404,17 +395,10 @@ LINUXINCLUDE    := \
 
 KBUILD_CPPFLAGS := -D__KERNEL__
 
-KBUILD_CFLAGS   := -Wall -Werror -Wundef -Wstrict-prototypes -Wno-trigraphs \
+KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
-		   -Wno-format-security -Wno-stringop-overflow \ \
-		   -std=gnu89 $(call cc-option,-fno-PIE) \
-		   -D_FORTIFY_SOURCE=1 \
-		   -march=armv8-a+crypto+crc \
-		   -mcpu=exynos-m1+crypto+crc \
-		   -mtune=exynos-m1 \
-		   -ftree-vectorize \
-		   -DNDEBUG \
-		   -pipe
+		   -Wno-format-security -Wno-logical-not-parentheses -Wno-format-extra-args -Wno-enum-compare \
+		   -std=gnu89 $(call cc-option,-fno-PIE)
 
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
@@ -666,7 +650,7 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, attribute-alias)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= $(call cc-option,-Oz,-Os)
+KBUILD_CFLAGS	+= -Os
 else
 ifdef CONFIG_PROFILE_ALL_BRANCHES
 KBUILD_CFLAGS	+= -O2
@@ -784,12 +768,6 @@ endif
 
 KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
 ifdef CONFIG_FRAME_POINTER
-
-KBUILD_CFLAGS += $(call cc-disable-warning, unused-variable)
-KBUILD_CFLAGS += $(call cc-disable-warning, unused-label)
-KBUILD_CFLAGS += $(call cc-disable-warning, unused-function)
-KBUILD_CFLAGS += $(call cc-disable-warning, unused-value)
-
 KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
 else
 # Some targets (ARM with Thumb2, for example), can't be built with frame
@@ -808,7 +786,7 @@ ifdef CONFIG_DEBUG_INFO
 ifdef CONFIG_DEBUG_INFO_SPLIT
 KBUILD_CFLAGS   += $(call cc-option, -gsplit-dwarf, -g)
 else
-KBUILD_CFLAGS	+= 
+KBUILD_CFLAGS	+= -g
 endif
 KBUILD_AFLAGS	+= -Wa,-gdwarf-2
 endif
@@ -890,20 +868,8 @@ KBUILD_CFLAGS	+= $(call cc-option,-fmerge-constants)
 # Make sure -fstack-check isn't enabled (like gentoo apparently did)
 KBUILD_CFLAGS  += $(call cc-option,-fno-stack-check,)
 
-# disallow errors like 'EXPORT_GPL(foo);' with missing header
-KBUILD_CFLAGS   += $(call cc-option,-Werror=implicit-int)
-
-# require functions to have arguments in prototypes, not empty 'int foo()'
-KBUILD_CFLAGS   += $(call cc-option,-Werror=strict-prototypes)
-
-# Prohibit date/time macros, which would make the build non-deterministic
-KBUILD_CFLAGS   += $(call cc-option,-Werror=date-time)
-
-# enforce correct pointer usage
-KBUILD_CFLAGS   += $(call cc-option,-Werror=incompatible-pointer-types)
-
-# Require designated initializers for all marked structures
-KBUILD_CFLAGS   += $(call cc-option,-Werror=designated-init)
+# conserve stack if available
+KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)
 
 # use the deterministic mode of AR if available
 KBUILD_ARFLAGS := $(call ar-option,D)
