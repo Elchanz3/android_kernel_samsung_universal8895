@@ -14,7 +14,7 @@
 		mode = <0>; /* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <800 1280>;
 		size = <80 120>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <20 20 20>;
 		timing,v-porch = <20 20 20>;
 		timing,dsi-hs-clk = <600>;
@@ -45,7 +45,7 @@
 		mode = <2>;		/* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <1440 2560>;
 		size = <68 122>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <2 2 2>;
 		timing,v-porch = <15 3 1>;
 		timing,dsi-hs-clk = <1100>;
@@ -80,7 +80,7 @@
 		mode = <2>;		/* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <2160 1920>;
 		size = <68 122>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <2 2 2>;
 		timing,v-porch = <15 3 1>;
 		timing,dsi-hs-clk = <1100>;
@@ -107,7 +107,7 @@
 		mode = <2>;		/* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <2160 1920>;
 		size = <68 122>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <2 2 2>;
 		timing,v-porch = <15 3 1>;
 		timing,dsi-hs-clk = <1100>;
@@ -134,7 +134,7 @@
 		mode = <2>;		/* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <1440 2960>;
 		size = <70 143>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <2 2 2>;
 		timing,v-porch = <15 3 1>;
 		timing,dsi-hs-clk = <898>;
@@ -169,7 +169,7 @@
 		mode = <2>;		/* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <1440 2960>;
 		size = <71 145>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <2 2 2>;
 		timing,v-porch = <15 3 1>;
 		timing,dsi-hs-clk = <898>;
@@ -205,7 +205,7 @@
 		mode = <2>;		/* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <1440 2960>;
 		size = <70 143>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <2 2 2>;
 		timing,v-porch = <15 3 1>;
 		timing,dsi-hs-clk = <898>;
@@ -240,7 +240,7 @@
 		mode = <2>;		/* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <1440 2960>;
 		size = <65 133>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <2 2 2>;
 		timing,v-porch = <15 3 1>;
 		timing,dsi-hs-clk = <898>;
@@ -274,7 +274,7 @@
 		mode = <2>;		/* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <1440 2560>;
 		size = <80 120>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <2 2 2>;
 		timing,v-porch = <19 3 1>;
 		timing,dsi-hs-clk = <1100>;
@@ -302,7 +302,7 @@
 		mode = <2>;		/* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <1440 2560>;
 		size = <70 121>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <2 2 2>;
 		timing,v-porch = <19 3 1>;
 		timing,dsi-hs-clk = <1100>;
@@ -332,7 +332,7 @@
 		mode = <2>;		/* 0: video mode, 1: DP command mode, 2: MIPI command mode */
 		resolution = <1536 2048>;
 		size = <122 163>;
-		timing,refresh = <62>;
+		timing,refresh = <60>;
 		timing,h-porch = <2 2 2>;
 		timing,v-porch = <19 3 1>;
 		timing,dsi-hs-clk = <821>;
