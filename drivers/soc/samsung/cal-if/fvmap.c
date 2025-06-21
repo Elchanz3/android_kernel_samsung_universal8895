@@ -152,12 +152,13 @@ int fvmap_get_voltage_table(unsigned int id, unsigned int *table)
 
 }
 
-int fvmap_get_raw_voltage_table(unsigned int id, unsigned int *table)
+int fvmap_get_raw_voltage_table(unsigned int id)
 {
 	struct fvmap_header *fvmap_header;
 	struct rate_volt_header *fv_table;
 	int idx, i;
 	int num_of_lv;
+	unsigned int table[20];
 
 	idx = GET_IDX(id);
 
@@ -168,7 +169,10 @@ int fvmap_get_raw_voltage_table(unsigned int id, unsigned int *table)
 	for (i = 0; i < num_of_lv; i++)
 		table[i] = fv_table->table[i].volt;
 
-	return num_of_lv;
+	for (i = 0; i < num_of_lv; i++)
+		printk("dvfs id : %d  %d Khz : %d uv\n", ACPM_VCLK_TYPE | id, fv_table->table[i].rate, table[i]);
+
+	return 0;
 }
 
 static void fvmap_copy_from_sram(void __iomem *map_base, void __iomem *sram_base)
@@ -264,86 +268,3 @@ int fvmap_init(void __iomem *sram_base)
 
 	return 0;
 }
-
-
-static unsigned int fvmap_read(unsigned int dvfs_type, int mode, unsigned int value)
-{
-	volatile struct fvmap_header *fvmap_header;
-	struct rate_volt_header *rvh;
-	int size, rest;
-	int i, j;
-	unsigned int ret = 0;
-
-	fvmap_header = fvmap_base;
-	size = cmucal_get_list_size(ACPM_VCLK_TYPE);
-
-	if (mode == READ_RATE)
-		for (i = 0; i < size; i++) {
-			if (fvmap_header[i].dvfs_type == dvfs_type) {
-				rvh = fvmap_base + fvmap_header[i].o_ratevolt;
-				for (j = 0; j < fvmap_header[i].num_of_lv; j++) {
-					if (rvh->table[j].rate == value)
-						ret = rvh->table[j].volt;
-				}
-				break;
-			}
-		}
-	else if (mode == READ_VOLT)
-		for (i = 0; i < size; i++) {
-			if (fvmap_header[i].dvfs_type == dvfs_type) {
-				rvh = fvmap_base + fvmap_header[i].o_ratevolt;
-				for (j = 0; j < fvmap_header[i].num_of_lv; j++) {
-					if (rvh->table[j].volt == value)
-						ret = rvh->table[j].rate;
-				}
-				break;
-			}
-		}
-
-	return ret;
-}
-
-
-
-
-int fvmap_patch(unsigned int dvfs_type, unsigned int rate, unsigned int volt)
-{
-	unsigned int ret;
-
-	ret = fvmap_read(fvmap_base, dvfs_type, READ_RATE, rate);
-	if (!ret)
-		ret = fvmap_read(sram_fvmap_base, dvfs_type, READ_RATE, rate);
-
-	return ret;
-}
-
-
-
-
-static inline ssize_t fvmap_print(char *buf, unsigned int dvfs_type)
-{
-	volatile struct fvmap_header *fvmap_header;
-	struct rate_volt_header *cur;
-	int size;
-	int i, j;
-	ssize_t len = 0;
-
-	fvmap_header = fvmap_base;
-	size = cmucal_get_list_size(ACPM_VCLK_TYPE);
-
-	for (i = 0; i < size; i++) {
-		if (fvmap_header[i].dvfs_type == dvfs_type) {
-			cur = fvmap_base + fvmap_header[i].o_ratevolt;
-			for (j = 0; j < fvmap_header[i].num_of_lv; j++) {
-				len += scnprintf(buf + len, PAGE_SIZE - len,
-					"%7d Khz : %d uv\n", cur->table[j].rate, cur->table[j].volt);
-			}
-			break;
-		}
-	}
-
-	return len;
-}
-
-
-
