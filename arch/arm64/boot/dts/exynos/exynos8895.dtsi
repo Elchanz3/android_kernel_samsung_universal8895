@@ -882,7 +882,7 @@
 		/* 2. UFS COMMON           */
 		/* ----------------------- */
 		freq-table-hz = <0 0>, <0 0>;
-		pclk-freq-avail-range = <216000000 216000000>;
+		pclk-freq-avail-range = <70000000 166000000>;
 
 		ufs,pmd-local-l2-timer = <8000 28000 20000>;
 		ufs,pmd-remote-l2-timer = <12000 32000 16000>;
