@@ -56,6 +56,8 @@ extern unsigned int cal_dfs_get_resume_freq(unsigned int id);
 extern unsigned int cal_dfs_get_lv_num(unsigned int id);
 extern unsigned int cal_asv_pmic_info(void);
 
+extern int fvmap_get_raw_voltage_table(unsigned int id, unsigned int *table);
+
 
 struct dvfs_rate_volt {
 	unsigned long rate;
@@ -101,3 +103,10 @@ extern int cal_if_init(void *);
 //extern void cal_vclk_dbg_info(unsigned int id);
 #endif
 #endif
+
+
+extern unsigned int fvmap_read(unsigned int dvfs_type, int mode, unsigned int value);
+extern int fvmap_patch(unsigned int dvfs_type, unsigned int rate, unsigned int volt);
+
+
+
