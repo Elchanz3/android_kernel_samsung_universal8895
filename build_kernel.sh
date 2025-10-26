@@ -10,16 +10,13 @@ export CCACHE_MAXSIZE=10G
 export ARCH=arm64
 export PROJECT_NAME=greatlte
 export LINUX_COMPILED_BY=Chanz22
-export COMPILE_HOST=Xeon_builder
+export COMPILE_HOST=private
 mkdir out
 mkdir images
 mkdir builds
 IMAGE_NAME=HyundraKernel
 
 current_dir=$(pwd)
-
-# clean source before build
-make mrproper && make clean
 
 # toolchain dir
 BUILD_CROSS_COMPILE=/home/chanz22/tc/gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
@@ -28,8 +25,8 @@ CLANG_TRIPLE=/home/chanz22/tc/gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu/
 KERNEL_MAKE_ENV="DTC_EXT=$(pwd)/tools/dtc CONFIG_BUILD_ARM64_DT_OVERLAY=y"
 
 # compile kernel
-make -j12 -C $(pwd) O=$(pwd)/out $KERNEL_MAKE_ENV ARCH=arm64 CROSS_COMPILE=$BUILD_CROSS_COMPILE CC=$KERNEL_LLVM_BIN CLANG_TRIPLE=$CLANG_TRIPLE CONFIG_SECTION_MISMATCH_WARN_ONLY=y exynos8895-greatlte_defconfig
-make -j12 -C $(pwd) O=$(pwd)/out $KERNEL_MAKE_ENV ARCH=arm64 CROSS_COMPILE=$BUILD_CROSS_COMPILE CC=$KERNEL_LLVM_BIN CLANG_TRIPLE=$CLANG_TRIPLE CONFIG_SECTION_MISMATCH_WARN_ONLY=y
+make -j8 -C $(pwd) O=$(pwd)/out $KERNEL_MAKE_ENV ARCH=arm64 CROSS_COMPILE=$BUILD_CROSS_COMPILE CC=$KERNEL_LLVM_BIN CLANG_TRIPLE=$CLANG_TRIPLE CONFIG_SECTION_MISMATCH_WARN_ONLY=y exynos8895-greatlte_defconfig
+make -j8 -C $(pwd) O=$(pwd)/out $KERNEL_MAKE_ENV ARCH=arm64 CROSS_COMPILE=$BUILD_CROSS_COMPILE CC=$KERNEL_LLVM_BIN CLANG_TRIPLE=$CLANG_TRIPLE CONFIG_SECTION_MISMATCH_WARN_ONLY=y
 
 # clean up previous images
 cd "$current_dir"/AIK
@@ -63,8 +60,5 @@ cd "$current_dir"
 
 # move generated image to builds dir renamed as lito_kernel
 mv "$current_dir"/AIK/image-new.img "$current_dir"/builds/"$IMAGE_NAME".img
-
-# clean out dir for new builds
-rm -r "$current_dir"/out
 
 echo done! you can find your image at /builds
