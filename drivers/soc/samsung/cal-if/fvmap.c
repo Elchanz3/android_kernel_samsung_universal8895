@@ -12,6 +12,9 @@
 #include "ra.h"
 #include "acpm_dvfs.h"
 
+#include <linux/kobject.h>
+#include <linux/sysfs.h>
+
 #define FVMAP_SIZE		(SZ_8K)
 
 void __iomem *fvmap_base;
@@ -268,3 +271,65 @@ int fvmap_init(void __iomem *sram_base)
 
 	return 0;
 }
+
+static struct kobject *fvmap_kobj;
+
+static ssize_t fvmap_export_show(struct kobject *kobj,
+				 struct kobj_attribute *attr, char *buf)
+{
+	struct fvmap_header *fvmap_header;
+	struct rate_volt_header *fv_table;
+	struct vclk *vclk;
+	int size, i, j;
+	ssize_t len = 0;
+
+	if (!fvmap_base)
+		return scnprintf(buf, PAGE_SIZE, "fvmap_base not initialized\n");
+
+	fvmap_header = fvmap_base;
+	size = cmucal_get_list_size(ACPM_VCLK_TYPE);
+
+	for (i = 0; i < size && len < PAGE_SIZE - 128; i++) {
+		vclk = cmucal_get_node(ACPM_VCLK_TYPE | i);
+		if (!vclk)
+			continue;
+
+		fv_table = fvmap_base + fvmap_header[i].o_ratevolt;
+
+		len += scnprintf(buf + len, PAGE_SIZE - len,
+				 "[%s] ID:%d num_lv:%d\n",
+				 vclk->name, i, fvmap_header[i].num_of_lv);
+
+		for (j = 0; j < fvmap_header[i].num_of_lv &&
+			    len < PAGE_SIZE - 64; j++) {
+			len += scnprintf(buf + len, PAGE_SIZE - len,
+					 "  %7d kHz -> %7d uV\n",
+					 fv_table->table[j].rate,
+					 fv_table->table[j].volt);
+		}
+		len += scnprintf(buf + len, PAGE_SIZE - len, "\n");
+	}
+
+	return len;
+}
+
+static struct kobj_attribute fvmap_export_attr =
+	__ATTR(export, 0444, fvmap_export_show, NULL);
+
+static int __init fvmap_sysfs_init(void)
+{
+	int ret;
+
+	fvmap_kobj = kobject_create_and_add("fvmap_export", power_kobj);
+	if (!fvmap_kobj)
+		return -ENOMEM;
+
+	ret = sysfs_create_file(fvmap_kobj, &fvmap_export_attr.attr);
+	if (ret)
+		kobject_put(fvmap_kobj);
+
+	pr_info("FVMAP: sram_data exported to > /sys/power/fvmap_export/export\n");
+	return ret;
+}
+
+late_initcall(fvmap_sysfs_init);
