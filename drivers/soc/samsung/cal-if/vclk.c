@@ -235,7 +235,7 @@ unsigned long vclk_recalc_rate(unsigned int id)
 
 		if (i == vclk->num_rates) {
 			vclk->vrate = 0;
-			pr_debug("%s:%x failed\n", __func__, id);
+			pr_info("%s:%x failed\n", __func__, id);
 		}
 	} else {
 		vclk->vrate = ra_recalc_rate(vclk->list[0]);
@@ -359,6 +359,7 @@ int vclk_get_bigturbo_table(unsigned int *table)
 	int i;
 
 	gen_block = ect_get_block("GEN");
+	pr_info("%s\n", buf);
 	if (gen_block == NULL)
 		return -EVCLKINVAL;
 
@@ -421,6 +422,7 @@ static int vclk_get_dfs_info(struct vclk *vclk)
 	struct ect_dvfs_domain *dvfs_domain;
 	int *params, idx;
 	int ret = 0;
+	char buf[256];
 
 	dvfs_block = ect_get_block("DVFS");
 	if (dvfs_block == NULL)
@@ -434,12 +436,14 @@ static int vclk_get_dfs_info(struct vclk *vclk)
 	vclk->num_list = dvfs_domain->num_of_clock;
 	vclk->max_freq = dvfs_domain->max_frequency;
 	vclk->min_freq = dvfs_domain->min_frequency;
-	pr_debug("ACPM_DVFS :%s\n", vclk->name);
+	pr_info("ACPM_DVFS :%s\n", vclk->name);
 
 	vclk->list = kzalloc(sizeof(unsigned int) * vclk->num_list, GFP_KERNEL);
 	if (!vclk->list)
 		return -EVCLKNOMEM;
 
+        pr_info("num_of_clock: %d\n", dvfs_domain->num_of_clock);
+	pr_info("num_list: %d\n", vclk->num_list);
 	for (i = 0; i < dvfs_domain->num_of_clock; i++) {
 		if (dvfs_domain->list_sfr[i] == ECT_DUMMY_SFR) {
 			vclk->list[i] = INVALID_CLK_ID;
@@ -447,12 +451,15 @@ static int vclk_get_dfs_info(struct vclk *vclk)
 		}
 
 		vclk->list[i] = cmucal_get_id_by_addr(dvfs_domain->list_sfr[i]);
+		
+		pr_info("	list: %d\n", vclk->list[i]);
 		if (vclk->list[i] == INVALID_CLK_ID) {
 			ret = -EVCLKINVAL;
 			goto err_nomem1;
 		}
 	}
 
+        pr_info("num_rates: %d\n", vclk->num_rates);
 	vclk->lut = kzalloc(sizeof(struct vclk_lut) * vclk->num_rates,
 			    GFP_KERNEL);
 	if (!vclk->lut) {
@@ -461,7 +468,10 @@ static int vclk_get_dfs_info(struct vclk *vclk)
 	}
 
 	for (i = 0; i < vclk->num_rates; i++) {
+	        int len = 0;
+	
 		vclk->lut[i].rate = dvfs_domain->list_level[i].level;
+		pr_info("	rate: %d\n", vclk->lut[i].rate);
 		params = kcalloc(vclk->num_list, sizeof(int), GFP_KERNEL);
 		if (!params) {
 			ret = -EVCLKNOMEM;
@@ -472,10 +482,13 @@ static int vclk_get_dfs_info(struct vclk *vclk)
 			goto err_nomem2;
 		}
 
+                len += sprintf(buf, "	params:");
 		for (j = 0; j < vclk->num_list; ++j) {
 			idx = i * vclk->num_list + j;
 			params[j] = dvfs_domain->list_dvfs_value[idx];
+			len += sprintf(buf + len, " %d", params[j]);
 		}
+		pr_info("%s\n", buf);
 		vclk->lut[i].params = params;
 	}
 
@@ -579,12 +592,12 @@ static int vclk_get_asv_info(struct vclk *vclk)
 	else
 		vclk->resume_freq = -1;
 
-	pr_debug("   num_rates    : %7d\n", vclk->num_rates);
-	pr_debug("   num_clk_list : %7d\n", vclk->num_list);
-	pr_debug("   max_freq     : %7d\n", vclk->max_freq);
-	pr_debug("   min_freq     : %7d\n", vclk->min_freq);
-	pr_debug("   boot_freq    : %7d\n", vclk->boot_freq);
-	pr_debug("   resume_freq  : %7d\n", vclk->resume_freq);
+	pr_info("   num_rates    : %7d\n", vclk->num_rates);
+	pr_info("   num_clk_list : %7d\n", vclk->num_list);
+	pr_info("   max_freq     : %7d\n", vclk->max_freq);
+	pr_info("   min_freq     : %7d\n", vclk->min_freq);
+	pr_info("   boot_freq    : %7d\n", vclk->boot_freq);
+	pr_info("   resume_freq  : %7d\n", vclk->resume_freq);
 
 	return ret;
 }
