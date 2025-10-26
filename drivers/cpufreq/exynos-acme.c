@@ -1195,7 +1195,7 @@ static int init_dm(struct exynos_cpufreq_domain *domain,
 	return register_exynos_dm_freq_scaler(domain->dm_type, dm_scaler);
 }
 
-static unsigned long arg_cpu_min_c1 = 332000;
+static unsigned long arg_cpu_min_c1 __ro_after_init = 332000;
 
 static int __init cpufreq_read_cpu_min_c1(char *cpu_min_c1)
 {
@@ -1212,7 +1212,7 @@ static int __init cpufreq_read_cpu_min_c1(char *cpu_min_c1)
 }
 __setup("cpu_min_c1=", cpufreq_read_cpu_min_c1);
 
-unsigned long arg_cpu_min_c2 = 741000;
+unsigned long arg_cpu_min_c2 __ro_after_init = 741000;
 
 static __init int cpufreq_read_cpu_min_c2(char *cpu_min_c2)
 {
@@ -1229,7 +1229,7 @@ static __init int cpufreq_read_cpu_min_c2(char *cpu_min_c2)
 }
 __setup("cpu_min_c2=", cpufreq_read_cpu_min_c2);
 
-unsigned long arg_gpu_min = 260000;
+unsigned long arg_gpu_min __ro_after_init = 260000;
 
 static __init int cpufreq_read_gpu_min(char *gpu_min)
 {
@@ -1246,7 +1246,7 @@ static __init int cpufreq_read_gpu_min(char *gpu_min)
 }
 __setup("gpu_min=", cpufreq_read_gpu_min);
 
-unsigned long arg_mif_min = 421000;
+unsigned long arg_mif_min __ro_after_init = 421000;
 
 static __init int cpufreq_read_mif_min(char *mif_min)
 {
@@ -1263,7 +1263,7 @@ static __init int cpufreq_read_mif_min(char *mif_min)
 }
 __setup("mif_min=", cpufreq_read_mif_min);
 
-static unsigned long arg_cpu_max_c1 = 2002000;
+static unsigned long arg_cpu_max_c1 __ro_after_init = 2002000;
 
 static int __init cpufreq_read_cpu_max_c1(char *cpu_max_c1)
 {
@@ -1280,7 +1280,7 @@ static int __init cpufreq_read_cpu_max_c1(char *cpu_max_c1)
 }
 __setup("cpu_max_c1=", cpufreq_read_cpu_max_c1);
 
-unsigned long arg_cpu_max_c2 = 2808000;
+unsigned long arg_cpu_max_c2 __ro_after_init = 2808000;
 
 static __init int cpufreq_read_cpu_max_c2(char *cpu_max_c2)
 {
@@ -1297,7 +1297,7 @@ static __init int cpufreq_read_cpu_max_c2(char *cpu_max_c2)
 }
 __setup("cpu_max_c2=", cpufreq_read_cpu_max_c2);
 
-unsigned long arg_gpu_max = 598000;
+unsigned long arg_gpu_max __ro_after_init = 572000;
 
 static __init int cpufreq_read_gpu_max(char *gpu_max)
 {
@@ -1314,7 +1314,7 @@ static __init int cpufreq_read_gpu_max(char *gpu_max)
 }
 __setup("gpu_max=", cpufreq_read_gpu_max);
 
-unsigned long arg_mif_max = 1794000;
+unsigned long arg_mif_max __ro_after_init = 1794000;
 
 static __init int cpufreq_read_mif_max(char *mif_max)
 {
