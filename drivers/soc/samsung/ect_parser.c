@@ -1082,8 +1082,6 @@ static void ect_present_test_data(char *version)
 	pr_info("========================================\n");
 }
 
-#if defined(CONFIG_ECT_DUMP)
-
 static int ect_dump_header(struct seq_file *s, void *data);
 static int ect_dump_dvfs(struct seq_file *s, void *data);
 static int ect_dump_pll(struct seq_file *s, void *data);
@@ -1099,26 +1097,6 @@ static int ect_dump_binary(struct seq_file *s, void *data);
 static int ect_dump_new_timing_parameter(struct seq_file *s, void *data);
 
 static int dump_open(struct inode *inode, struct file *file);
-
-#else
-
-#define ect_dump_header			NULL
-#define ect_dump_ap_thermal		NULL
-#define ect_dump_voltage		NULL
-#define ect_dump_dvfs			NULL
-#define ect_dump_margin			NULL
-#define ect_dump_mif_thermal		NULL
-#define ect_dump_pll			NULL
-#define ect_dump_rcc			NULL
-#define ect_dump_timing_parameter	NULL
-#define ect_dump_minlock		NULL
-#define ect_dump_gen_parameter		NULL
-#define ect_dump_binary			NULL
-#define ect_dump_new_timing_parameter	NULL
-
-#define dump_open			NULL
-
-#endif
 
 static struct ect_info ect_header_info = {
 	.block_name = BLOCK_HEADER,
