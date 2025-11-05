@@ -125,3 +125,4 @@ AIK/
 *.mips64
 builds/*
 KernelSU/
+/out
